@@ -1,0 +1,32 @@
+{
+  "name": "platzivideoAPI",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"node src/index.js",
+    "watch": "nodemon -e js -w ./ -x npm run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jscortes523/platzivideoAPI.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jscortes523/platzivideoAPI/issues"
+  },
+  "homepage": "https://github.com/jscortes523/platzivideoAPI#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^6.5.1",
+    "nodemon": "^1.19.4"
+  }
+}
