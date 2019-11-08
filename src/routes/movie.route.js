@@ -1,10 +1,22 @@
 const MovieService = require('../services/movies')
 
+const {
+    movieIdSchema,
+    createMovieSchema,
+    updateMovieSchema
+} = require('../utils/schemas/movies.schemas')
+
+const validationHandler = require('../utils/middleware/valdationHandler')
+
+const cacheResponse = require('../utils/cacheResponse')
+const {FIVE_MINUTES_IN_SECONDS,SIXTY_MINUTES_IN_SECONDS} = require('../utils/time')
+
 const movieAPI = (app) => {
 
     const movieServices = new MovieService()
 
-    app.get('/',async (req, res, next) => {
+    app.get('/movies',async (req, res, next) => {
+        cacheResponse(res,FIVE_MINUTES_IN_SECONDS)
         try{
             const {tags} = req.body
             const movies = await movieServices.getMovies({tags})
@@ -20,7 +32,8 @@ const movieAPI = (app) => {
     })
 
 
-    app.get('/:movieId',async (req, res, next) => {
+    app.get('/movies/:movieId',validationHandler({movieId:movieIdSchema},'params'),async (req, res, next) => {
+        cacheResponse(res,SIXTY_MINUTES_IN_SECONDS)
         try{
             const {movieId} = req.params
             const movies = await movieServices.getMovie({movieId})
@@ -35,7 +48,7 @@ const movieAPI = (app) => {
         }
     })
 
-    app.post('/',async (req, res, next) => {
+    app.post('/movies',validationHandler(createMovieSchema),async (req, res, next) => {
         try{
             const movie = req.body
             const createdMovieId = await movieServices.createMovie({movie})
@@ -50,7 +63,7 @@ const movieAPI = (app) => {
         }
     })
 
-    app.put('/:movieId',async (req, res, next) => {
+    app.put('/movies/:movieId',validationHandler({movieId:movieIdSchema},'params'),validationHandler(updateMovieSchema),async (req, res, next) => {
         try{
             const movieId = req.params
             const movie = req.body
@@ -66,7 +79,7 @@ const movieAPI = (app) => {
         }
     })
 
-    app.delete('/:movieId',async (req, res, next) => {
+    app.delete('/movies/:movieId',validationHandler({movieId:movieIdSchema},'params'),async (req, res, next) => {
         try{
             const movieId = req.params
             const deletedMovieId = await movieServices.deleteMovie({movieId})
